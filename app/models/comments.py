@@ -1,10 +1,11 @@
 from datetime import datetime
 
-from app.db import Base
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import TEXT
-from sqlalchemy import ForeignKey
 from marshmallow.validate import Email
+from sqlalchemy import ForeignKey
+from sqlalchemy.dialects.postgresql import TEXT
+from sqlalchemy.orm import Mapped, mapped_column
+
+from app.db import Base
 
 
 class Comments(Base):

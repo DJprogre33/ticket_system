@@ -1,9 +1,10 @@
 from datetime import datetime
 from enum import Enum
 
-from app.db import Base
-from sqlalchemy.orm import Mapped, mapped_column
 from marshmallow.validate import Email
+from sqlalchemy.orm import Mapped, mapped_column
+
+from app.db import Base
 
 
 class TicketsStatus(Enum):
@@ -22,5 +23,3 @@ class Tickets(Base):
     topic_name: Mapped[str]
     email: Mapped[Email]
     status: Mapped[TicketsStatus]
-
-
