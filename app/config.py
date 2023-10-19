@@ -1,10 +1,13 @@
+from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    model_config = ConfigDict(env_file="../.env")
+
     DB_HOST: str
     DB_PORT: str
-    DB_USER: st
+    DB_USER: str
     DB_PASS: str
     DB_NAME: str
 
