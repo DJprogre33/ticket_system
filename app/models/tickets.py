@@ -18,7 +18,7 @@ class TicketsStatus(Enum):
 class Tickets(Base):
     __tablename__ = "tickets"
 
-    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4())
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     creation_date: Mapped[datetime]
     modification_date: Mapped[datetime]
     topic_name: Mapped[str]
