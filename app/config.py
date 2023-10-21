@@ -3,13 +3,17 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    model_config = ConfigDict(env_file="../.env")
+    model_config = ConfigDict(env_file=".env")
 
     DB_HOST: str
     DB_PORT: str
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
+
+    POSTGRES_DB: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
 
     @property
     def database_url(self):
