@@ -20,6 +20,7 @@ def create_app():
     init_db()
     flask_app.after_request(close_session)
     flask_app.register_error_handler(ValidationError, handle_validation_error)
+    print("creating flask app")
     return flask_app
 
 
