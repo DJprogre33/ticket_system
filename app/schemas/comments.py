@@ -1,12 +1,12 @@
 from marshmallow import Schema, fields
 
 
-class SComments(Schema):
+class CommentsSchema(Schema):
     ticket_id = fields.UUID()
     author_email = fields.Email()
     text = fields.String()
 
 
-class SCommentsResponse(SComments):
+class CommentsResponseSchema(CommentsSchema):
     id = fields.UUID()
     creation_date = fields.DateTime()

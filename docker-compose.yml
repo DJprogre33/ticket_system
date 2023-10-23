@@ -11,17 +11,16 @@ services:
     env_file:
       - .env
 
-#  ticket_system:
-#    build:
-#      dockerfile: Dockerfile
-#    container_name: ticket_system
-#    command: gunicorn --config app/gunicorn.conf.py app.main:app
-#    ports:
-#      - "8000:8000"
-#    volumes:
-#      - .:/ticket_system
-#    depends_on:
-#      - postgres_db
+  ticket_system:
+    build:
+      dockerfile: Dockerfile
+    container_name: ticket_system
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/ticket_system
+    depends_on:
+      - postgres_db
 
 volumes:
   postgres_data:

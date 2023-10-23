@@ -1,13 +1,9 @@
-from pathlib import Path
-
 from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
 
-env_path = Path(__file__).parent.parent / Path(".env")
-
 
 class Settings(BaseSettings):
-    model_config = ConfigDict(env_file=env_path)
+    model_config = ConfigDict(env_file=".env")
 
     DB_HOST: str
     DB_PORT: str
