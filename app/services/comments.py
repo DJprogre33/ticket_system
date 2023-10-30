@@ -10,21 +10,24 @@ from app.repositories.tickets import TicketsRepository
 
 
 class CommentsService:
-    @staticmethod
+    def __init__(self, db: Session):
+        self.tickets_repo = TicketsRepository(db)
+        self.comments_repo = CommentsRepository(db)
+
     def create_new_comment(
-        db: Session, ticket_id: UUID, author_email: str, text: str
+        self, ticket_id: UUID, author_email: str, text: str
     ) -> Comments:
         current_date = datetime.now(tz=UTC)
-        tickets_repo, comments_repo = TicketsRepository(db), CommentsRepository(db)
 
-        existing_ticket = tickets_repo.find_one_or_none(id=ticket_id)
+        existing_ticket = self.tickets_repo.find_one_or_none(id=ticket_id)
         if not existing_ticket:
             raise NotFound("Incorrect ticket id")
 
-        created_comment = comments_repo.insert_data(
+        created_comment = self.comments_repo.insert_data(
             ticket_id=ticket_id,
             creation_date=current_date,
             author_email=author_email,
             text=text,
         )
+        self.comments_repo.commit()
         return created_comment

@@ -15,23 +15,20 @@ class TicketsService:
         "waiting_for_answer": ["answered", "closed"],
     }
 
-    @staticmethod
-    def get_ticket_by_id(db: Session, id: UUID) -> Tickets:
-        tickets_repo = TicketsRepository(db)
-        existing_ticket = tickets_repo.find_one_or_none(id=id)
+    def __init__(self, db: Session):
+        self.tickets_repo = TicketsRepository(db)
+
+    def get_ticket_by_id(self, id: UUID) -> Tickets:
+        existing_ticket = self.tickets_repo.find_one_or_none(id=id)
         if not existing_ticket:
             raise NotFound("Incorrect ticket id")
         return existing_ticket
 
-    @staticmethod
-    def create_new_ticket(
-        db: Session, topic_name: str, text: str, email: str
-    ) -> Tickets:
+    def create_new_ticket(self, topic_name: str, text: str, email: str) -> Tickets:
         current_date = datetime.now(tz=UTC)
-        tickets_repo = TicketsRepository(db)
         status = "open"
 
-        created_ticket = tickets_repo.insert_data(
+        created_ticket = self.tickets_repo.insert_data(
             creation_date=current_date,
             modification_date=current_date,
             topic_name=topic_name,
@@ -39,15 +36,13 @@ class TicketsService:
             email=email,
             status=status,
         )
+        self.tickets_repo.commit()
         return created_ticket
 
-    def change_ticket_status(
-        self, db: Session, id: UUID, status: TicketsStatus
-    ) -> Tickets:
+    def change_ticket_status(self, id: UUID, status: TicketsStatus) -> Tickets:
         current_date = datetime.now(tz=UTC)
-        tickets_repo = TicketsRepository(db)
 
-        existing_ticket = tickets_repo.find_one_or_none(id=id)
+        existing_ticket = self.tickets_repo.find_one_or_none(id=id)
         if not existing_ticket:
             raise NotFound("Incorrect ticket id")
 
@@ -55,7 +50,8 @@ class TicketsService:
         if not allowed_statuses or status.value not in allowed_statuses:
             raise BadRequest("Incorrect ticket status")
 
-        updated_ticket = tickets_repo.update_fields_by_id(
+        updated_ticket = self.tickets_repo.update_fields_by_id(
             entity_id=existing_ticket.id, modification_date=current_date, status=status
         )
+        self.tickets_repo.commit()
         return updated_ticket

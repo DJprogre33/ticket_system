@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional, Type, TypeVar
+from typing import Any, Optional, TypeVar
 
 from sqlalchemy import insert, select, update
 from sqlalchemy.orm import Session
@@ -42,7 +42,6 @@ class SQLAlchemyRepository(AbstractRepository):
     def insert_data(self, **data: Any) -> SQLAlchemy:
         query = insert(self.model).values(**data).returning(self.model)
         result = self.session.execute(query)
-        self.session.commit()
         return result.scalars().one()
 
     def update_fields_by_id(self, entity_id: int, **data: Any) -> SQLAlchemy:
@@ -53,5 +52,7 @@ class SQLAlchemyRepository(AbstractRepository):
             .returning(self.model)
         )
         result = self.session.execute(query)
-        self.session.commit()
         return result.scalars().one()
+
+    def commit(self):
+        self.session.commit()

@@ -22,7 +22,7 @@ tickets_router = Blueprint(
 def get_ticket_by_id(ticket_id: UUID) -> [Response, int]:
     db = db_session()
     ticket_id = SIdUUID().load({"id": ticket_id})
-    existing_ticket = TicketsService().get_ticket_by_id(db, **ticket_id)
+    existing_ticket = TicketsService(db).get_ticket_by_id(**ticket_id)
     return TicketsResponseSchema().dump(existing_ticket), 200
 
 
@@ -31,7 +31,7 @@ def create_new_ticket() -> [Response, int]:
     db = db_session()
     data = request.get_json()
     new_ticket = TicketsSchema().load(data)
-    created_ticket = TicketsService().create_new_ticket(db=db, **new_ticket)
+    created_ticket = TicketsService(db).create_new_ticket(**new_ticket)
     return TicketsResponseSchema().dump(created_ticket), 201
 
 
@@ -42,7 +42,7 @@ def change_ticket_status(ticket_id: UUID) -> [Response, int]:
     data.update({"id": ticket_id})
 
     new_status = TicketsStatusChangeSchema().load(data)
-    updated_ticket = TicketsService().change_ticket_status(db=db, **new_status)
+    updated_ticket = TicketsService(db).change_ticket_status(**new_status)
     return TicketsResponseSchema().dump(updated_ticket), 200
 
 
@@ -53,5 +53,5 @@ def create_new_comment(ticket_id: UUID) -> [Response, int]:
     data.update({"ticket_id": ticket_id})
 
     new_comment = CommentsSchema().load(data)
-    created_comment = CommentsService().create_new_comment(db, **new_comment)
+    created_comment = CommentsService(db).create_new_comment(**new_comment)
     return CommentsResponseSchema().dump(created_comment), 201
